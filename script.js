@@ -1,4 +1,10 @@
-const API_BASE = window.location.origin;
+// ============================================
+// USE THE CORRECT API URL
+// ============================================
+// ✅ Replace with your actual Render URL
+const API_BASE = 'https://ai-log-analytics.onrender.com';
+
+console.log('🔗 API Base URL:', API_BASE);
 
 // ============================================
 // NAVIGATION
@@ -7,28 +13,49 @@ document.querySelectorAll('.sidebar nav a').forEach(link => {
     link.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // Update active link
         document.querySelectorAll('.sidebar nav a').forEach(l => l.classList.remove('active'));
         this.classList.add('active');
         
-        // Show correct page
         const page = this.dataset.page;
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(`page-${page}`).classList.add('active');
         
-        // Load data for the page
         if (page === 'logs') loadAllLogs();
         if (page === 'analytics') loadAnalytics();
     });
 });
 
 // ============================================
-// LOAD STATS (Dashboard)
+// TEST API CONNECTION
+// ============================================
+async function testApiConnection() {
+    try {
+        console.log('🔌 Testing API connection...');
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+        console.log('✅ API Connected:', data);
+        return true;
+    } catch (error) {
+        console.error('❌ API Connection Failed:', error);
+        showError('⚠️ Cannot connect to server. Please refresh.');
+        return false;
+    }
+}
+
+// ============================================
+// LOAD STATS
 // ============================================
 async function loadStats() {
     try {
+        console.log('📊 Loading stats...');
         const response = await fetch(`${API_BASE}/api/stats`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('📊 Stats loaded:', data);
         
         document.getElementById('totalLogs').textContent = data.total_logs || 0;
         document.getElementById('anomalyCount').textContent = data.anomaly_count || 0;
@@ -36,7 +63,8 @@ async function loadStats() {
         
         renderChart('severityChart', data.severity_distribution || {});
     } catch (error) {
-        console.error('Error loading stats:', error);
+        console.error('❌ Error loading stats:', error);
+        showError('Failed to load stats');
     }
 }
 
@@ -48,11 +76,19 @@ async function loadLogs() {
     const url = `${API_BASE}/api/logs?limit=100${severity ? `&severity=${severity}` : ''}`;
     
     try {
+        console.log('📋 Loading logs...');
         const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('📋 Logs loaded:', data.logs?.length || 0);
         renderLogs('logsTable', data.logs || []);
     } catch (error) {
-        console.error('Error loading logs:', error);
+        console.error('❌ Error loading logs:', error);
+        showError('Failed to load logs');
     }
 }
 
@@ -64,12 +100,20 @@ async function loadAllLogs() {
     const url = `${API_BASE}/api/logs?limit=200${severity ? `&severity=${severity}` : ''}`;
     
     try {
+        console.log('📋 Loading all logs...');
         const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('📋 All logs loaded:', data.logs?.length || 0);
         renderLogs('allLogsTable', data.logs || [], true);
         document.getElementById('logCount').textContent = `${data.logs?.length || 0} logs`;
     } catch (error) {
-        console.error('Error loading all logs:', error);
+        console.error('❌ Error loading all logs:', error);
+        showError('Failed to load all logs');
     }
 }
 
@@ -145,8 +189,15 @@ function renderChart(containerId, data) {
 // ============================================
 async function loadAnalytics() {
     try {
+        console.log('📈 Loading analytics...');
         const response = await fetch(`${API_BASE}/api/stats`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('📈 Analytics loaded:', data);
         
         document.getElementById('analyticsTotal').textContent = data.total_logs || 0;
         document.getElementById('analyticsAnomaly').textContent = data.anomaly_count || 0;
@@ -169,7 +220,8 @@ async function loadAnalytics() {
         sourceContainer.innerHTML = html || '<div style="color:rgba(255,255,255,0.2);padding:20px;">No source data</div>';
         
     } catch (error) {
-        console.error('Error loading analytics:', error);
+        console.error('❌ Error loading analytics:', error);
+        showError('Failed to load analytics');
     }
 }
 
@@ -188,25 +240,32 @@ async function analyzeLog() {
     showResult('⏳ Analyzing...', '', '');
     
     try {
+        console.log('🔍 Analyzing:', message);
         const response = await fetch(`${API_BASE}/api/analyze`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: message })
         });
         
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
         
-        if (response.ok) {
+        const data = await response.json();
+        console.log('🔍 Analysis result:', data);
+        
+        if (data.message) {
             const status = data.is_anomaly ? 'anomaly' : 'normal';
             const emoji = data.is_anomaly ? '🚨' : '✅';
             const label = data.is_anomaly ? 'ANOMALY DETECTED!' : 'Normal Log';
             const details = `Severity: ${data.severity} | Anomaly Score: ${data.anomaly_score}`;
             showResult(`${emoji} ${label}`, details, status);
         } else {
-            showResult('❌ Error: ' + data.error, '', '');
+            showResult('❌ Error: ' + (data.error || 'Unknown error'), '', '');
         }
     } catch (error) {
-        showResult('❌ Network error', '', '');
+        console.error('❌ Analyze error:', error);
+        showResult('❌ Network error. Please refresh.', '', '');
     }
 }
 
@@ -225,28 +284,38 @@ async function ingestLog() {
     showResult('⏳ Ingesting...', '', '');
     
     try {
+        console.log('📥 Ingesting:', message);
         const response = await fetch(`${API_BASE}/api/logs/ingest`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: message, source: 'web-ui' })
         });
         
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
         
-        if (response.ok && data.success) {
+        const data = await response.json();
+        console.log('📥 Ingest result:', data);
+        
+        if (data.success) {
             const status = data.is_anomaly ? 'anomaly' : 'normal';
             const emoji = data.is_anomaly ? '🚨' : '✅';
             showResult(`${emoji} Ingested - ${data.severity}`, `Message: ${data.log.message}`, status);
             input.value = '';
             refreshAll();
         } else {
-            showResult('❌ Error: ' + data.error, '', '');
+            showResult('❌ Error: ' + (data.error || 'Unknown error'), '', '');
         }
     } catch (error) {
-        showResult('❌ Network error', '', '');
+        console.error('❌ Ingest error:', error);
+        showResult('❌ Network error. Please refresh.', '', '');
     }
 }
 
+// ============================================
+// UI HELPERS
+// ============================================
 function showResult(message, details, status) {
     const container = document.getElementById('resultMessage');
     const detailsContainer = document.getElementById('resultDetails');
@@ -258,9 +327,12 @@ function showResult(message, details, status) {
     detailsContainer.style.display = details ? 'block' : 'none';
 }
 
-// ============================================
-// REFRESH ALL
-// ============================================
+function showError(message) {
+    const container = document.getElementById('resultMessage');
+    container.textContent = message;
+    container.className = 'error';
+}
+
 function refreshAll() {
     loadStats();
     loadLogs();
@@ -283,14 +355,30 @@ document.getElementById('logInput').addEventListener('keypress', (e) => {
 });
 
 // ============================================
-// AUTO-REFRESH
-// ============================================
-setInterval(() => {
-    loadStats();
-    loadLogs();
-}, 10000);
-
-// ============================================
 // INITIALIZE
 // ============================================
-refreshAll();
+async function init() {
+    console.log('🚀 Initializing AI Log Analytics...');
+    
+    const connected = await testApiConnection();
+    
+    if (connected) {
+        refreshAll();
+        console.log('✅ System ready!');
+    } else {
+        document.getElementById('totalLogs').textContent = '⚠️';
+        document.getElementById('anomalyCount').textContent = '⚠️';
+        document.getElementById('normalCount').textContent = '⚠️';
+    }
+}
+
+// Auto-refresh every 15 seconds
+setInterval(() => {
+    if (document.getElementById('page-dashboard').classList.contains('active')) {
+        loadStats();
+        loadLogs();
+    }
+}, 15000);
+
+// Start the app
+init();
