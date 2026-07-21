@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Log Analytics</title>
+    <title>Log Analytics Platform</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -19,6 +19,7 @@
                 <a href="#" class="active" data-page="dashboard">📋 Dashboard</a>
                 <a href="#" data-page="logs">📁 Logs</a>
                 <a href="#" data-page="analytics">📈 Analytics</a>
+                <a href="#" data-page="performance">⚡ Performance</a>
             </nav>
             <div class="sidebar-footer">
                 <span class="status-dot"></span>
@@ -33,13 +34,12 @@
             <!-- DASHBOARD PAGE -->
             <!-- ========================== -->
             <div id="page-dashboard" class="page active">
-
                 <header class="top-bar">
-                    <h1>📊 AI-Ready Log Analytics</h1>
+                    <h1>📊 Log Analytics Platform</h1>
                     <span class="badge live">● Live</span>
                 </header>
 
-                <!-- Stats -->
+                <!-- Stats Cards -->
                 <section class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">📝</div>
@@ -56,10 +56,10 @@
                         </div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">✅</div>
+                        <div class="stat-icon">⚡</div>
                         <div class="stat-info">
-                            <span class="stat-value" id="normalCount">0</span>
-                            <span class="stat-label">Normal Logs</span>
+                            <span class="stat-value" id="avgResponse">0ms</span>
+                            <span class="stat-label">Avg Response</span>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -71,13 +71,14 @@
                     </div>
                 </section>
 
-                <!-- Analysis -->
+                <!-- Log Analysis -->
                 <section class="card">
                     <h2>🔍 Real-Time Log Analysis</h2>
                     <div class="input-group">
                         <input type="text" id="logInput" placeholder="Enter log message to analyze..." />
                         <button id="analyzeBtn" class="btn btn-primary">🧠 Analyze</button>
                         <button id="ingestBtn" class="btn btn-secondary">📥 Ingest</button>
+                        <button id="bulkIngestBtn" class="btn btn-secondary">📦 Bulk</button>
                     </div>
                     <div id="analysisResult" class="result-box">
                         <div id="resultMessage">Enter a log message and click Analyze</div>
@@ -96,15 +97,18 @@
                             <option value="ERROR">ERROR</option>
                             <option value="CRITICAL">CRITICAL</option>
                         </select>
+                        <select id="sourceFilter">
+                            <option value="">All Sources</option>
+                            <option value="web-server">web-server</option>
+                            <option value="api-server">api-server</option>
+                            <option value="database">database</option>
+                            <option value="auth-service">auth-service</option>
+                            <option value="cache-service">cache-service</option>
+                        </select>
+                        <span class="badge" id="perfBadge">⚡ &lt;30ms</span>
                         <button id="refreshBtn" class="btn btn-sm">🔄 Refresh</button>
                     </div>
                     <div id="logsTable"></div>
-                </section>
-
-                <!-- Chart -->
-                <section class="card">
-                    <h2>📊 Severity Distribution</h2>
-                    <div id="severityChart" class="chart-container"></div>
                 </section>
             </div>
 
@@ -126,6 +130,17 @@
                             <option value="ERROR">ERROR</option>
                             <option value="CRITICAL">CRITICAL</option>
                         </select>
+                        <select id="logPageSourceFilter">
+                            <option value="">All Sources</option>
+                            <option value="web-server">web-server</option>
+                            <option value="api-server">api-server</option>
+                            <option value="database">database</option>
+                            <option value="auth-service">auth-service</option>
+                            <option value="cache-service">cache-service</option>
+                        </select>
+                        <span id="paginationInfo" style="color:rgba(255,255,255,0.3);font-size:13px;">Page 1</span>
+                        <button id="prevPageBtn" class="btn btn-sm">◀ Prev</button>
+                        <button id="nextPageBtn" class="btn btn-sm">Next ▶</button>
                         <button id="logPageRefreshBtn" class="btn btn-sm">🔄 Refresh</button>
                     </div>
                     <div id="allLogsTable" style="max-height:500px;overflow-y:auto;"></div>
@@ -138,10 +153,10 @@
             <div id="page-analytics" class="page">
                 <header class="top-bar">
                     <h1>📈 Analytics Dashboard</h1>
-                    <span class="badge">Stats</span>
+                    <span class="badge">Real-Time</span>
                 </header>
 
-                <section class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <section class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
                     <div class="stat-card">
                         <div class="stat-icon">📊</div>
                         <div class="stat-info">
@@ -163,6 +178,13 @@
                             <span class="stat-label">Critical Logs</span>
                         </div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="analyticsAvgResponse">0ms</span>
+                            <span class="stat-label">Avg Response</span>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="card">
@@ -173,6 +195,55 @@
                 <section class="card">
                     <h2>📊 Source Distribution</h2>
                     <div id="sourceDistribution" class="source-grid"></div>
+                </section>
+
+                <section class="card">
+                    <h2>📈 Time Series (Last 24 Hours)</h2>
+                    <div id="timeSeries" class="time-series-container"></div>
+                </section>
+            </div>
+
+            <!-- ========================== -->
+            <!-- PERFORMANCE PAGE -->
+            <!-- ========================== -->
+            <div id="page-performance" class="page">
+                <header class="top-bar">
+                    <h1>⚡ Performance Metrics</h1>
+                    <span class="badge">60% Reduction</span>
+                </header>
+
+                <section class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="perfQueryTime">0ms</span>
+                            <span class="stat-label">Query Time</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="perfLogsProcessed">0</span>
+                            <span class="stat-label">Logs Processed</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="perfReduction">60%</span>
+                            <span class="stat-label">Latency Reduction</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>📊 Performance Benchmarks</h2>
+                    <div id="perfChart" class="chart-container"></div>
+                </section>
+
+                <section class="card">
+                    <h2>📋 System Metrics</h2>
+                    <div id="systemMetrics" style="color:rgba(255,255,255,0.6);font-size:14px;line-height:2;"></div>
                 </section>
             </div>
 
