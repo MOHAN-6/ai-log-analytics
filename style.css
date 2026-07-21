@@ -25,6 +25,7 @@ body {
     padding: 24px 16px;
     display: flex;
     flex-direction: column;
+    z-index: 100;
 }
 
 .logo {
@@ -39,6 +40,15 @@ body {
 
 .logo-icon {
     font-size: 1.4rem;
+}
+
+.version-badge {
+    font-size: 9px;
+    background: rgba(129, 140, 248, 0.2);
+    color: #818cf8;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
 }
 
 .sidebar nav {
@@ -69,11 +79,11 @@ body {
 
 .sidebar-footer {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
     padding: 12px 14px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 13px;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.3);
 }
 
@@ -83,6 +93,12 @@ body {
     border-radius: 50%;
     background: #34d399;
     animation: pulse-dot 2s infinite;
+    display: inline-block;
+}
+
+.stats-badge {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.2);
 }
 
 @keyframes pulse-dot {
@@ -183,7 +199,7 @@ body {
 }
 
 /* ============================================
-   INPUTS
+   INPUTS & BUTTONS
    ============================================ */
 .input-group {
     display: flex;
@@ -211,9 +227,6 @@ body {
     border-color: rgba(129, 140, 248, 0.4);
 }
 
-/* ============================================
-   BUTTONS
-   ============================================ */
 .btn {
     padding: 12px 22px;
     border: none;
@@ -250,7 +263,7 @@ body {
 }
 
 /* ============================================
-   TABLE CONTROLS
+   TABLES
    ============================================ */
 .table-controls {
     display: flex;
@@ -269,11 +282,8 @@ body {
     font-size: 13px;
 }
 
-/* ============================================
-   LOGS TABLE
-   ============================================ */
-#logsTable {
-    max-height: 280px;
+#logsTable, #allLogsTable {
+    max-height: 300px;
     overflow-y: auto;
 }
 
@@ -341,14 +351,6 @@ body {
 }
 
 /* ============================================
-   PAGINATION
-   ============================================ */
-#paginationInfo {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 13px;
-}
-
-/* ============================================
    SOURCE DISTRIBUTION
    ============================================ */
 .source-grid {
@@ -364,13 +366,13 @@ body {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     flex: 1;
-    min-width: 120px;
+    min-width: 100px;
     text-align: center;
 }
 
 .source-item .source-name {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
 }
 
@@ -386,36 +388,36 @@ body {
    ============================================ */
 .time-series-container {
     display: flex;
-    gap: 4px;
+    gap: 3px;
     padding: 20px 0;
-    height: 150px;
+    height: 140px;
     align-items: flex-end;
 }
 
 .time-bar {
     flex: 1;
     min-width: 20px;
-    background: rgba(129, 140, 248, 0.6);
+    background: rgba(129, 140, 248, 0.5);
     border-radius: 3px 3px 0 0;
     transition: height 0.5s ease;
     position: relative;
 }
 
 .time-bar:hover {
-    background: rgba(129, 140, 248, 0.9);
+    background: rgba(129, 140, 248, 0.8);
 }
 
 .time-bar .time-label {
     position: absolute;
-    bottom: -20px;
+    bottom: -18px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 8px;
-    color: rgba(255, 255, 255, 0.2);
+    font-size: 7px;
+    color: rgba(255, 255, 255, 0.15);
 }
 
 /* ============================================
-   RESULT
+   RESULT BOX
    ============================================ */
 .result-box {
     margin-top: 14px;
@@ -450,29 +452,6 @@ body {
 }
 
 /* ============================================
-   FULL LOGS PAGE
-   ============================================ */
-#allLogsTable .log-row {
-    display: grid;
-    grid-template-columns: 70px 90px 1fr 100px 50px;
-    gap: 10px;
-    padding: 10px 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 13px;
-    align-items: center;
-}
-
-#allLogsTable .log-row.header {
-    color: rgba(255, 255, 255, 0.25);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: sticky;
-    top: 0;
-    background: #0a0a12;
-}
-
-/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
@@ -482,7 +461,9 @@ body {
     }
     .sidebar .logo span:last-child,
     .sidebar nav a span,
-    .sidebar-footer span:last-child {
+    .sidebar-footer span:last-child,
+    .version-badge,
+    .stats-badge {
         display: none;
     }
     .sidebar nav a {
@@ -502,12 +483,6 @@ body {
         font-size: 12px;
     }
     .log-row .source { display: none; }
-    #allLogsTable .log-row {
-        grid-template-columns: 60px 70px 1fr;
-        font-size: 12px;
-    }
-    #allLogsTable .log-row .source,
-    #allLogsTable .log-row .anomaly { display: none; }
     .time-series-container {
         height: 100px;
     }
