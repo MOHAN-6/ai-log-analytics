@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory
-from flask_cors import CORS
+from flask_cors import CORS  # ✅ Make sure this is imported!
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -9,7 +9,9 @@ from datetime import datetime, timedelta
 import os
 
 app = Flask(__name__, static_folder='.', static_url_path='')
-CORS(app)
+
+# ✅ CRITICAL FIX: Enable CORS for ALL routes
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # ============================================
 # TRAINING DATA
