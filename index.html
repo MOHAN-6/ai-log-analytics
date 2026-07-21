@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Log Analytics</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">📊</span>
+                <span>LogAnalytics</span>
+            </div>
+            <nav>
+                <a href="#" class="active">📋 Dashboard</a>
+                <a href="#">📁 Logs</a>
+                <a href="#">📈 Analytics</a>
+            </nav>
+            <div class="sidebar-footer">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>📊 AI-Ready Log Analytics</h1>
+                <span class="badge live">● Live</span>
+            </header>
+
+            <!-- Stats -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalLogs">0</span>
+                        <span class="stat-label">Total Logs</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🚨</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="anomalyCount">0</span>
+                        <span class="stat-label">Anomalies</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="normalCount">0</span>
+                        <span class="stat-label">Normal Logs</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-info">
+                        <span class="stat-value">Active</span>
+                        <span class="stat-label">AI Model</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis -->
+            <section class="card">
+                <h2>🔍 Real-Time Log Analysis</h2>
+                <div class="input-group">
+                    <input type="text" id="logInput" placeholder="Enter log message to analyze..." />
+                    <button id="analyzeBtn" class="btn btn-primary">🧠 Analyze</button>
+                    <button id="ingestBtn" class="btn btn-secondary">📥 Ingest</button>
+                </div>
+                <div id="analysisResult" class="result-box">
+                    <div id="resultMessage">Enter a log message and click Analyze</div>
+                    <div id="resultDetails"></div>
+                </div>
+            </section>
+
+            <!-- Logs -->
+            <section class="card">
+                <h2>📋 Recent Logs</h2>
+                <div class="table-controls">
+                    <select id="severityFilter">
+                        <option value="">All Severities</option>
+                        <option value="INFO">INFO</option>
+                        <option value="WARNING">WARNING</option>
+                        <option value="ERROR">ERROR</option>
+                        <option value="CRITICAL">CRITICAL</option>
+                    </select>
+                    <button id="refreshBtn" class="btn btn-sm">🔄 Refresh</button>
+                </div>
+                <div id="logsTable"></div>
+            </section>
+
+            <!-- Chart -->
+            <section class="card">
+                <h2>📊 Severity Distribution</h2>
+                <div id="severityChart" class="chart-container"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
