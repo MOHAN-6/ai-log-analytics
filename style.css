@@ -344,6 +344,66 @@ body {
     font-weight: 600;
 }
 
+/* PAGE NAVIGATION */
+.page {
+    display: none;
+}
+.page.active {
+    display: block;
+}
+
+/* SOURCE DISTRIBUTION */
+.source-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.source-item {
+    background: rgba(255,255,255,0.04);
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.source-item .source-name {
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.source-item .source-count {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 4px;
+}
+
+/* FULL LOGS PAGE */
+#allLogsTable .log-row {
+    display: grid;
+    grid-template-columns: 70px 90px 1fr 100px 50px;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    font-size: 13px;
+    align-items: center;
+}
+
+#allLogsTable .log-row.header {
+    color: rgba(255,255,255,0.25);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    background: #0a0a12;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .sidebar {
@@ -372,4 +432,10 @@ body {
         font-size: 12px;
     }
     .log-row .source { display: none; }
+    #allLogsTable .log-row {
+        grid-template-columns: 60px 70px 1fr;
+        font-size: 12px;
+    }
+    #allLogsTable .log-row .source,
+    #allLogsTable .log-row .anomaly { display: none; }
 }
