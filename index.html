@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Log Analytics Platform</title>
+    <title>AI-Ready Log Analytics</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,6 +14,7 @@
             <div class="logo">
                 <span class="logo-icon">📊</span>
                 <span>LogAnalytics</span>
+                <span class="version-badge">AI</span>
             </div>
             <nav>
                 <a href="#" class="active" data-page="dashboard">📋 Dashboard</a>
@@ -24,6 +25,7 @@
             <div class="sidebar-footer">
                 <span class="status-dot"></span>
                 <span>System Online</span>
+                <span class="stats-badge" id="totalLogsBadge">0 logs</span>
             </div>
         </aside>
 
@@ -31,15 +33,14 @@
         <main class="main-content">
 
             <!-- ========================== -->
-            <!-- DASHBOARD PAGE -->
+            <!-- DASHBOARD -->
             <!-- ========================== -->
             <div id="page-dashboard" class="page active">
                 <header class="top-bar">
-                    <h1>📊 Log Analytics Platform</h1>
+                    <h1>📊 AI-Ready Log Analytics</h1>
                     <span class="badge live">● Live</span>
                 </header>
 
-                <!-- Stats Cards -->
                 <section class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">📝</div>
@@ -71,14 +72,12 @@
                     </div>
                 </section>
 
-                <!-- Log Analysis -->
                 <section class="card">
                     <h2>🔍 Real-Time Log Analysis</h2>
                     <div class="input-group">
                         <input type="text" id="logInput" placeholder="Enter log message to analyze..." />
                         <button id="analyzeBtn" class="btn btn-primary">🧠 Analyze</button>
                         <button id="ingestBtn" class="btn btn-secondary">📥 Ingest</button>
-                        <button id="bulkIngestBtn" class="btn btn-secondary">📦 Bulk</button>
                     </div>
                     <div id="analysisResult" class="result-box">
                         <div id="resultMessage">Enter a log message and click Analyze</div>
@@ -86,7 +85,6 @@
                     </div>
                 </section>
 
-                <!-- Recent Logs -->
                 <section class="card">
                     <h2>📋 Recent Logs</h2>
                     <div class="table-controls">
@@ -97,15 +95,6 @@
                             <option value="ERROR">ERROR</option>
                             <option value="CRITICAL">CRITICAL</option>
                         </select>
-                        <select id="sourceFilter">
-                            <option value="">All Sources</option>
-                            <option value="web-server">web-server</option>
-                            <option value="api-server">api-server</option>
-                            <option value="database">database</option>
-                            <option value="auth-service">auth-service</option>
-                            <option value="cache-service">cache-service</option>
-                        </select>
-                        <span class="badge" id="perfBadge">⚡ &lt;30ms</span>
                         <button id="refreshBtn" class="btn btn-sm">🔄 Refresh</button>
                     </div>
                     <div id="logsTable"></div>
@@ -132,18 +121,18 @@
                         </select>
                         <select id="logPageSourceFilter">
                             <option value="">All Sources</option>
-                            <option value="web-server">web-server</option>
-                            <option value="api-server">api-server</option>
-                            <option value="database">database</option>
-                            <option value="auth-service">auth-service</option>
-                            <option value="cache-service">cache-service</option>
+                            <option value="aws-api">aws-api</option>
+                            <option value="aws-console">aws-console</option>
+                            <option value="cloudwatch">cloudwatch</option>
+                            <option value="lambda">lambda</option>
+                            <option value="ec2-agent">ec2-agent</option>
                         </select>
-                        <span id="paginationInfo" style="color:rgba(255,255,255,0.3);font-size:13px;">Page 1</span>
+                        <span id="paginationInfo">Page 1</span>
                         <button id="prevPageBtn" class="btn btn-sm">◀ Prev</button>
                         <button id="nextPageBtn" class="btn btn-sm">Next ▶</button>
                         <button id="logPageRefreshBtn" class="btn btn-sm">🔄 Refresh</button>
                     </div>
-                    <div id="allLogsTable" style="max-height:500px;overflow-y:auto;"></div>
+                    <div id="allLogsTable"></div>
                 </section>
             </div>
 
@@ -156,7 +145,7 @@
                     <span class="badge">Real-Time</span>
                 </header>
 
-                <section class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <section class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">📊</div>
                         <div class="stat-info">
@@ -193,8 +182,8 @@
                 </section>
 
                 <section class="card">
-                    <h2>📊 Source Distribution</h2>
-                    <div id="sourceDistribution" class="source-grid"></div>
+                    <h2>📊 Service Distribution</h2>
+                    <div id="serviceDistribution" class="source-grid"></div>
                 </section>
 
                 <section class="card">
@@ -209,10 +198,10 @@
             <div id="page-performance" class="page">
                 <header class="top-bar">
                     <h1>⚡ Performance Metrics</h1>
-                    <span class="badge">60% Reduction</span>
+                    <span class="badge">500 Concurrent</span>
                 </header>
 
-                <section class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <section class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">⚡</div>
                         <div class="stat-info">
@@ -234,16 +223,27 @@
                             <span class="stat-label">Latency Reduction</span>
                         </div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="perfConcurrent">500</span>
+                            <span class="stat-label">Concurrent Capacity</span>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="card">
-                    <h2>📊 Performance Benchmarks</h2>
-                    <div id="perfChart" class="chart-container"></div>
+                    <h2>🚀 Performance Test</h2>
+                    <div style="margin-bottom:12px;color:rgba(255,255,255,0.4);font-size:13px;">
+                        Click the button below to test 500 concurrent requests.
+                    </div>
+                    <button id="perfTestBtn" class="btn btn-primary">🚀 Run 500 Concurrent Test</button>
+                    <div id="perfResult" style="margin-top:16px;"></div>
                 </section>
 
                 <section class="card">
-                    <h2>📋 System Metrics</h2>
-                    <div id="systemMetrics" style="color:rgba(255,255,255,0.6);font-size:14px;line-height:2;"></div>
+                    <h2>📊 System Metrics</h2>
+                    <div id="systemMetrics"></div>
                 </section>
             </div>
 
