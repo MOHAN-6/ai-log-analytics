@@ -16,9 +16,9 @@
                 <span>LogAnalytics</span>
             </div>
             <nav>
-                <a href="#" class="active">📋 Dashboard</a>
-                <a href="#">📁 Logs</a>
-                <a href="#">📈 Analytics</a>
+                <a href="#" class="active" data-page="dashboard">📋 Dashboard</a>
+                <a href="#" data-page="logs">📁 Logs</a>
+                <a href="#" data-page="analytics">📈 Analytics</a>
             </nav>
             <div class="sidebar-footer">
                 <span class="status-dot"></span>
@@ -26,80 +26,156 @@
             </div>
         </aside>
 
-        <!-- Main -->
+        <!-- Main Content -->
         <main class="main-content">
-            <header class="top-bar">
-                <h1>📊 AI-Ready Log Analytics</h1>
-                <span class="badge live">● Live</span>
-            </header>
 
-            <!-- Stats -->
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="totalLogs">0</span>
-                        <span class="stat-label">Total Logs</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🚨</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="anomalyCount">0</span>
-                        <span class="stat-label">Anomalies</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="normalCount">0</span>
-                        <span class="stat-label">Normal Logs</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🧠</div>
-                    <div class="stat-info">
-                        <span class="stat-value">Active</span>
-                        <span class="stat-label">AI Model</span>
-                    </div>
-                </div>
-            </section>
+            <!-- ========================== -->
+            <!-- DASHBOARD PAGE -->
+            <!-- ========================== -->
+            <div id="page-dashboard" class="page active">
 
-            <!-- Analysis -->
-            <section class="card">
-                <h2>🔍 Real-Time Log Analysis</h2>
-                <div class="input-group">
-                    <input type="text" id="logInput" placeholder="Enter log message to analyze..." />
-                    <button id="analyzeBtn" class="btn btn-primary">🧠 Analyze</button>
-                    <button id="ingestBtn" class="btn btn-secondary">📥 Ingest</button>
-                </div>
-                <div id="analysisResult" class="result-box">
-                    <div id="resultMessage">Enter a log message and click Analyze</div>
-                    <div id="resultDetails"></div>
-                </div>
-            </section>
+                <header class="top-bar">
+                    <h1>📊 AI-Ready Log Analytics</h1>
+                    <span class="badge live">● Live</span>
+                </header>
 
-            <!-- Logs -->
-            <section class="card">
-                <h2>📋 Recent Logs</h2>
-                <div class="table-controls">
-                    <select id="severityFilter">
-                        <option value="">All Severities</option>
-                        <option value="INFO">INFO</option>
-                        <option value="WARNING">WARNING</option>
-                        <option value="ERROR">ERROR</option>
-                        <option value="CRITICAL">CRITICAL</option>
-                    </select>
-                    <button id="refreshBtn" class="btn btn-sm">🔄 Refresh</button>
-                </div>
-                <div id="logsTable"></div>
-            </section>
+                <!-- Stats -->
+                <section class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalLogs">0</span>
+                            <span class="stat-label">Total Logs</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="anomalyCount">0</span>
+                            <span class="stat-label">Anomalies</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="normalCount">0</span>
+                            <span class="stat-label">Normal Logs</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🧠</div>
+                        <div class="stat-info">
+                            <span class="stat-value">Active</span>
+                            <span class="stat-label">AI Model</span>
+                        </div>
+                    </div>
+                </section>
 
-            <!-- Chart -->
-            <section class="card">
-                <h2>📊 Severity Distribution</h2>
-                <div id="severityChart" class="chart-container"></div>
-            </section>
+                <!-- Analysis -->
+                <section class="card">
+                    <h2>🔍 Real-Time Log Analysis</h2>
+                    <div class="input-group">
+                        <input type="text" id="logInput" placeholder="Enter log message to analyze..." />
+                        <button id="analyzeBtn" class="btn btn-primary">🧠 Analyze</button>
+                        <button id="ingestBtn" class="btn btn-secondary">📥 Ingest</button>
+                    </div>
+                    <div id="analysisResult" class="result-box">
+                        <div id="resultMessage">Enter a log message and click Analyze</div>
+                        <div id="resultDetails"></div>
+                    </div>
+                </section>
+
+                <!-- Recent Logs -->
+                <section class="card">
+                    <h2>📋 Recent Logs</h2>
+                    <div class="table-controls">
+                        <select id="severityFilter">
+                            <option value="">All Severities</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                        <button id="refreshBtn" class="btn btn-sm">🔄 Refresh</button>
+                    </div>
+                    <div id="logsTable"></div>
+                </section>
+
+                <!-- Chart -->
+                <section class="card">
+                    <h2>📊 Severity Distribution</h2>
+                    <div id="severityChart" class="chart-container"></div>
+                </section>
+            </div>
+
+            <!-- ========================== -->
+            <!-- LOGS PAGE -->
+            <!-- ========================== -->
+            <div id="page-logs" class="page">
+                <header class="top-bar">
+                    <h1>📁 All Logs</h1>
+                    <span class="badge" id="logCount">0 logs</span>
+                </header>
+
+                <section class="card">
+                    <div class="table-controls">
+                        <select id="logPageSeverityFilter">
+                            <option value="">All Severities</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                        <button id="logPageRefreshBtn" class="btn btn-sm">🔄 Refresh</button>
+                    </div>
+                    <div id="allLogsTable" style="max-height:500px;overflow-y:auto;"></div>
+                </section>
+            </div>
+
+            <!-- ========================== -->
+            <!-- ANALYTICS PAGE -->
+            <!-- ========================== -->
+            <div id="page-analytics" class="page">
+                <header class="top-bar">
+                    <h1>📈 Analytics Dashboard</h1>
+                    <span class="badge">Stats</span>
+                </header>
+
+                <section class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="analyticsTotal">0</span>
+                            <span class="stat-label">Total Logs</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚨</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="analyticsAnomaly">0</span>
+                            <span class="stat-label">Anomalies</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔴</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="analyticsCritical">0</span>
+                            <span class="stat-label">Critical Logs</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <h2>📊 Severity Distribution</h2>
+                    <div id="analyticsChart" class="chart-container"></div>
+                </section>
+
+                <section class="card">
+                    <h2>📊 Source Distribution</h2>
+                    <div id="sourceDistribution" class="source-grid"></div>
+                </section>
+            </div>
+
         </main>
     </div>
 
