@@ -355,4 +355,160 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-   
+    padding: 10px 0;
+}
+
+.source-item {
+    background: rgba(255, 255, 255, 0.04);
+    padding: 12px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.source-item .source-name {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.source-item .source-count {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 4px;
+}
+
+/* ============================================
+   TIME SERIES
+   ============================================ */
+.time-series-container {
+    display: flex;
+    gap: 4px;
+    padding: 20px 0;
+    height: 150px;
+    align-items: flex-end;
+}
+
+.time-bar {
+    flex: 1;
+    min-width: 20px;
+    background: rgba(129, 140, 248, 0.6);
+    border-radius: 3px 3px 0 0;
+    transition: height 0.5s ease;
+    position: relative;
+}
+
+.time-bar:hover {
+    background: rgba(129, 140, 248, 0.9);
+}
+
+.time-bar .time-label {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   RESULT
+   ============================================ */
+.result-box {
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.result-box .normal {
+    color: #34d399;
+}
+
+.result-box .anomaly {
+    color: #f87171;
+}
+
+.result-box .details {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* ============================================
+   PAGE NAVIGATION
+   ============================================ */
+.page {
+    display: none;
+}
+.page.active {
+    display: block;
+}
+
+/* ============================================
+   FULL LOGS PAGE
+   ============================================ */
+#allLogsTable .log-row {
+    display: grid;
+    grid-template-columns: 70px 90px 1fr 100px 50px;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 13px;
+    align-items: center;
+}
+
+#allLogsTable .log-row.header {
+    color: rgba(255, 255, 255, 0.25);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    background: #0a0a12;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 50px;
+        padding: 16px 8px;
+    }
+    .sidebar .logo span:last-child,
+    .sidebar nav a span,
+    .sidebar-footer span:last-child {
+        display: none;
+    }
+    .sidebar nav a {
+        text-align: center;
+        padding: 10px;
+        font-size: 18px;
+    }
+    .main-content {
+        margin-left: 50px;
+        padding: 16px;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .log-row {
+        grid-template-columns: 60px 70px 1fr;
+        font-size: 12px;
+    }
+    .log-row .source { display: none; }
+    #allLogsTable .log-row {
+        grid-template-columns: 60px 70px 1fr;
+        font-size: 12px;
+    }
+    #allLogsTable .log-row .source,
+    #allLogsTable .log-row .anomaly { display: none; }
+    .time-series-container {
+        height: 100px;
+    }
+}
